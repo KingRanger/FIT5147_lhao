@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+    body { margin:0;position:relative;top:0;right: 0px;;bottom:0;left:0; }
+    svg { width:55%; height: 100% }
+    text { font-family: 'Open Sans'; }
+  </style>
+  <div>
+    <div style="width: 400px; float: left; ">
+    <!-- Create a div where the graph will take place -->
+
+    
+    </div>
+    <div style="width: 430px; float: left; font-size: 20px;font-weight: 790;margin-left:10px; margin-bottom:20px; margin-top:10px;color: #24446eda; text-align: left;"> 
+      <p style="line-height:30px;">
+          <span class="our-services-icon fa fa-people"></span>
+          Graphic explanation:
+      </p>
+      <p style="line-height:30px; font-size: 15px; color: #151416da;">In the picture on the right, you can directly see the humidity in the seven states from 2019-08 to 2020-01. It seems that every state is similar. This shows that humidity is not the main factor that causes more wildfires in New South Wales than in other states.</p>
+      <p style="line-height:30px;font-size: 15px;color: #151416da;">When you hope to check the monthly humidity in a specific state, please click on the state's part on the image. </p>
+      <p style="line-height:30px;">
+        <span class="our-services-icon fa fa-people"></span>
+        Supplement (humidity):
+      </p>
+      <p style="line-height:30px;font-size: 15px;color: #151416da;">The degree of humidity of the air is called "humidity". I use relative humidity, expressed as a percentage ('%'), to indicate the current state of absolute humidity relative to the maximum humidity at the same temperature.</p>
+	  <p style="line-height:30px;font-size: 15px;color: #151416da;">Humidity between 30%-60% is comfortable. Almost all states in Australia have humidity within this range. However, the facts show that such humidity cannot limit the outbreak of wildfires.</p>
+	  <p style="line-height:20px;font-size: 13px;color: #1e0a79da;">Reference: WIKIPEDIA <a href="https://en.wikipedia.org/wiki/Humidity#Absolute_humidity" target="_blank">Humidity</a>.</p>
+	  <p style="line-height:20px;font-size: 13px;color: #1e0a79da;">Reference: SENSITIVE CHOICE <a href="https://www.sensitivechoice.com/indoor-humidity/#:~:text=People%20typically%20find%20a%20relative,water%20vapour%20than%20cold%20air." target="_blank">Humidity level</a>.</p>
+    </div>
+  
+  </div>
+  
+</head>
+
+<body>
+  
+  <div class="svg-container"  ></div>
+  
+  <script>
+    var initialData = [
+		{
+			name: 'New south wales',
+			oddsRatio: 0.56,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.54
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.54
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.51
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.60
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.60
+				},
+				{
+					name: '2020-01',
+					oddsRatio: 0.66
+				},
+			]
+		},
+		{
+			name: 'Victoria',
+			oddsRatio: 0.56,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.61
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.56
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.54
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.55
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.54
+				},
+				{
+					name: '2020-01',
+					oddsRatio: 0.60
+				},
+
+			]
+		},
+		{
+			name: 'Queensland',
+			oddsRatio: 0.55,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.53
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.54
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.53
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.57
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.60
+				},
+				{
+					name: '2020-01',
+					oddsRatio: 0.64
+				},
+			]
+		},
+		{
+			name: 'South Australia',
+			oddsRatio: 0.53,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.69
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.60
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.50
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.42
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.43
+				},
+				{
+					name: '2020-01',
+					oddsRatio: 0.49
+				},
+
+
+			]
+		},
+        {
+			name: 'Western Australia',
+			oddsRatio: 0.53,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.63
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.56
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.52
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.48
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.45
+				},
+				{
+					name: '2020-01',
+					oddsRatio: 0.50
+				},
+
+
+			]
+		},
+        {
+			name: 'Tasmnia',
+			oddsRatio: 0.57,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.61
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.56
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.54
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.56
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.54
+				},	
+				{
+					name: '2020-01',
+					oddsRatio: 0.59
+				},	
+
+
+			]
+		},
+        {
+			name: 'Northern Territory',
+			oddsRatio: 0.59,
+			data: [
+				{
+					name: '2019-08',
+					oddsRatio: 0.46
+				},
+				{
+					name: '2019-09',
+					oddsRatio: 0.56
+				},
+				{
+					name: '2019-10',
+					oddsRatio: 0.58
+				},
+				{
+					name: '2019-11',
+					oddsRatio: 0.64
+				},
+				{
+					name: '2019-12',
+					oddsRatio: 0.72
+				},
+				{
+					name: '2020-01',
+					oddsRatio: 0.80
+				},
+
+
+			]
+		}
+        
+	];
+
+	var min = 0.87;
+	var max = 3.49;
+
+	var margin = {
+		top: 10,
+		right: 20,
+		bottom: 20,
+		left: 20
+	}
+    
+
+  var el = d3.select('.svg-container')
+    .style('width', '100%')
+    .style('height', '500px');
+
+  var svg = el.append('svg')
+    .attr('width', '100%')
+    .attr('height', '100%');
+
+  var svgWidth = svg.node().clientWidth;
+  var svgHeight = svg.node().clientHeight;
+
+  var g = svg.append('g')
+  	.attr('id', 'choosing-g')
+   	.attr('transform', 'translate(' + (svgWidth / 2) + ',' + (svgHeight / 1.9) + ')');
+
+  var isInitialData = true;
+	update();
+
+	function update(data, tweenArr, tweenColor) {
+
+		var contextMax = data ? getMax(data) : getMax(initialData);
+
+		var radius = (Math.min(
+			svgWidth - margin.left - margin.right,
+			svgHeight
+		) /1.5);
+
+		var innerRadius = 0;
+
+		arc = d3.svg.arc()
+			.innerRadius(function(d) {
+				if (d.data.oddsRatio < 1) {
+					return radius * (d.data.oddsRatio / max);
+				} else {
+					return radius * (1 / max);
+				}
+			})
+			.outerRadius(function (d) {
+				if (d.data.oddsRatio < 1) {
+					return radius * (1 / max);
+				} else {
+					return radius * (d.data.oddsRatio / max);
+				}
+			});
+
+		var pie = d3.layout.pie()
+			.sort(function (a, b) { return d3.descending(a.oddsRatio, b.oddsRatio); })
+			.value(function (d) { return 1; });
+
+		var data = data || initialData;
+      var tweenArr = tweenArr || null;
+
+		var colorScale = d3.scale.linear()
+			.domain([min, 0.5, .6, max])
+			.range(['#c0392b', '#e74c3c', '#1aa153', '#003b00','#1bb153']);
+
+		var opacityScale = d3.scale.linear()
+			.domain([0, 0.99, 1, max])
+			.range([1, 0.5, 0.5, 1])
+
+ 
+
+		/*** Polyline ***/
+		// remove all polyine before rebinding
+		d3.selectAll('.arc-polyline')
+			.data([]).exit().remove();
+
+		var line = g.selectAll('.arc-polyline')
+      	.data(pie(data));
+
+		line.exit().remove();
+
+		line.enter().append('polyline');
+
+		line
+			.attr('class', 'arc-polyline')
+			.style({
+				opacity: 0,
+				stroke: '#d3d3d3',
+				'stroke-width': 1,
+				fill: 'none'
+			})
+			.transition()
+			.delay(300)
+			.duration(500)
+			.ease('exp')
+			.style('opacity', 0.6)
+			.attr('points', function(d){
+
+				var centroid = arc.centroid(d);
+				var yPoint = centroid[1] * 2;
+				var midAngle = d.startAngle + (d.endAngle - d.startAngle)/2;
+
+				var radiusRatio = contextMax / max;
+
+				var firstPoint = centroid[0] + ',' + centroid[1];
+
+				var secondPointX = (radius * (radiusRatio)) * (midAngle < Math.PI ? 1 : -1);
+				var secondPoint = secondPointX + ',' + yPoint;
+
+				var thirdPointX = (radius * (radiusRatio + 0.1)) * (midAngle < Math.PI ? 1 : -1);
+				var thirdPoint = thirdPointX + ',' + yPoint;
+
+				return firstPoint + ',' + secondPoint + ',' + thirdPoint;
+			});
+
+		/*** Arc ***/
+		// remove all arcs before rendering new ones
+      g.selectAll('.arc')
+        .data([]).exit().remove();
+
+		var path = g.selectAll('.arc')
+    		.data(pie(data));
+
+      path.exit().remove();
+
+      path.enter().append('path');
+
+      path
+			.style('cursor', 'pointer')
+      	.attr('class', 'arc')
+      	.attr('fill', tweenColor || null)
+			.style('opacity', function(d) { return opacityScale(d.data.oddsRatio); })
+      	.transition()
+      	.duration(500)
+			.attr('fill', function(d, i) {
+				return colorScale(d.data.oddsRatio);
+      	})
+        	.attrTween('d', function(d, i) {
+        		if (!tweenArr) {
+              // if initial render, do not interpolate
+          		return function() { return arc(d); };
+            } else {
+              var tweenPie = pie(tweenArr);
+              return arcTweenSegment(d, tweenPie[i]);
+            }
+        });
+
+
+
+		/*** Text  ***/
+
+		g.selectAll('.textGroup')
+			.data([])
+			.exit().remove();
+
+		var textGroup = g.selectAll('.textGroup')
+			.data(pie(data));
+
+		textGroup.enter().append('g')
+			.style('cursor', 'pointer')
+			.attr('class', 'textGroup')
+			.attr('opacity', 0)
+			.transition()
+			.delay(300)
+			.duration(500)
+			.attr('opacity', 1);
+
+      textGroup.append('text')
+			.attr('class', 'arc-category')
+			.text(function(d) { return d.data.name; })
+      	.style('font-size', 15)
+      	.attr('fill', '#333')
+			.attr('text-anchor', function(d) {
+				var midAngle = d.startAngle + (d.endAngle - d.startAngle)/2;
+				return midAngle < Math.PI ? 'start' : 'end';
+			})
+      	.attr('x', function(d) {
+				var xOffset = radius * ((contextMax / max) + 0.1);
+				var midAngle = d.startAngle + (d.endAngle - d.startAngle)/2;
+				var rightSide = midAngle < Math.PI;
+				return rightSide ? xOffset : -xOffset;
+      	})
+        .attr('y', function(d) {
+        		return (arc.centroid(d)[1] * 2) - 6;
+      	});
+
+		var fullQuestion = textGroup.append('text')
+			.attr('class', 'arc-question')
+			.attr('text-anchor', function(d) {
+				var midAngle = d.startAngle + (d.endAngle - d.startAngle)/2;
+				return midAngle < Math.PI ? 'start' : 'end';
+			})
+
+		fullQuestion
+			.text(function(d) { return d.data.text; })
+			.style('font-size', 11)
+			.style('fill', 'rgb(180,180,180)')
+
+		var oddsRatio = textGroup.append('text')
+			.attr('class', 'arc-oddsRatio')
+			.attr('text-anchor', function(d) {
+				var midAngle = d.startAngle + (d.endAngle - d.startAngle)/2;
+				return midAngle < Math.PI ? 'start' : 'end';
+			})
+
+		oddsRatio
+			.text(function(d) {
+				var format = d3.format('%');
+				var oddsRatio = d.data.oddsRatio ;
+				var isNegative = oddsRatio < 0;
+				return isNegative ? '' + format(Math.abs(oddsRatio)) : format(Math.abs(oddsRatio));
+			});
+
+		var underline = textGroup.append('line')
+			.attr('class', 'arc-underline')
+			.attr({
+				stroke: function(d) { return colorScale(d.data.oddsRatio); },
+				'stroke-width': 1,
+				fill: 'none'
+			});
+
+		// Format text
+		textGroup.each(function(d) {
+			var xOffset = radius * ((contextMax / max) + 0.1);
+			var midAngle = d.startAngle + (d.endAngle - d.startAngle)/2;
+			var rightSide = midAngle < Math.PI;
+
+			var boundBox = d3.select(this).select('.arc-category').node().getBBox();
+			var categoryWidth = boundBox.width;
+
+			d3.select(this).select('.arc-oddsRatio')
+				.attr('x', function(d) {
+					return rightSide ? xOffset : -xOffset;
+				})
+				.attr('y', function(d) {
+					if (isInitialData) {
+						return (arc.centroid(d)[1] * 2) + 18;
+					} else {
+						return (arc.centroid(d)[1] * 2) + 53;
+					}
+				});
+
+			d3.select(this).select('.arc-question')
+				.attr('x', function(d) {
+					return rightSide ? xOffset : -xOffset;
+				})
+				.attr('y', function(d) {
+					return (arc.centroid(d)[1] * 2) + 15;
+				});
+
+			d3.select(this).select('.arc-underline')
+				.attr({
+					x1: function(d) {
+						return rightSide ? xOffset : -xOffset;
+					},
+					x2: function(d) {
+						return rightSide ? xOffset + categoryWidth : -xOffset - categoryWidth;
+					},
+					y1: (arc.centroid(d)[1] * 2),
+					y2: (arc.centroid(d)[1] * 2)
+				})
+
+		});
+
+
+
+		/** Events */
+
+		path
+			.on('mouseover', function(d) {
+				var outerData = deepObjCopy(d);
+				var data = deepObjCopy(d3.select(this).data()[0].data);
+
+				data.oddsRatio = data.oddsRatio + 0.1;
+
+				outerData.data = data;
+
+				d3.select(this)
+					.transition()
+					.duration(200)
+					.attr('d', arc(outerData));
+			})
+			.on('mouseleave', function(d) {
+				d3.select(this)
+					.transition()
+					.duration(150)
+					.attr('d', arc(d));
+
+			});
+
+		/** On Text Group Click */
+		textGroup.on('click', clickEvent)
+
+      /** On Arc Click **/
+      path.on('click', clickEvent);
+
+		function clickEvent(d) {
+
+			var el = d3.select(this);
+			var clickData = el.data();
+
+			var color;
+			var isTextGroup = el.select('.arc-underline').node() !== null;
+			if (isTextGroup) {
+				color = el.select('.arc-underline').attr('stroke');
+			} else {
+				color = el.attr('fill');
+			}
+
+			var clickDataCopy = deepObjCopy(clickData[0]);
+
+			d3.selectAll('.arc-polyline')
+				.data([]).exit().remove();
+
+			d3.selectAll('.textGroup')
+				.data([])
+				.exit().remove();
+
+			// remove all arcs except for selected
+			var path = d3.selectAll('.arc')
+				.data(clickData);
+
+			path.exit().remove();
+
+			path
+				.attr('fill', color)
+				.transition()
+				.duration(500)
+				.attrTween('d', function (d) {
+					return arcTweenFullCircle(d);
+				});
+
+        // wait for full circle tween to finish
+        var timeout = window.setTimeout(function() {
+
+          // check to see if will render initial dataset
+          isInitialData = !clickData[0].data.hasOwnProperty('data');
+
+          // create deep copy of selected arc
+			var deepCopy = deepObjCopy(clickData[0]);
+
+          // create array of n length with clicked object
+          var dataLength = deepCopy.data.hasOwnProperty('data') ?
+            	deepCopy.data.data.length : initialData.length;
+
+          var tweenObject = getTweenData(deepCopy, dataLength);
+
+      		// update and tween from clicked object
+          update(d.data.data, tweenObject, color);
+
+        }, 500);
+		}
+
+	}
+
+
+
+	function getTweenData(copy, length) {
+		var tweenFromArr = [];
+
+		for (var i = 0; i < length; i++) {
+			tweenFromArr.push(
+				// sort data by value
+				copy.data
+			);
+		}
+
+		return tweenFromArr;
+	}
+
+	function arcTweenFullCircle(d) {
+
+		// interpolate startAngle to top center, counterclockwise
+		var interpolateStart = d3.interpolate(
+			d.startAngle,
+			0
+		);
+
+		// interpolate endAngle to top center, clockwise
+		var interpolateEnd = d3.interpolate(
+			d.endAngle,
+			Math.PI * 2
+		);
+
+		return function (t) {
+			d.startAngle = interpolateStart(t);
+			d.endAngle = interpolateEnd(t);
+
+			return arc(d);
+		}
+	}
+
+	// tween old arc value to new arc value
+	function arcTweenSegment(d, tweenTo) {
+		var interpolate = d3.interpolate(tweenTo, d);
+
+		return function (t) {
+			return arc(interpolate(t));
+		}
+	}
+
+
+
+
+
+	function getMax(data) {
+		return data.reduce(function(acc, cur) {
+			return acc > cur.oddsRatio ? acc : cur.oddsRatio;
+		}, 0);
+	}
+
+	function deepObjCopy(dupeObj) {
+		var retObj = new Object();
+		if (typeof (dupeObj) == 'object') {
+			if (typeof (dupeObj.length) != 'undefined')
+				var retObj = new Array();
+			for (var objInd in dupeObj) {
+				if (typeof (dupeObj[objInd]) == 'object') {
+					retObj[objInd] = deepObjCopy(dupeObj[objInd]);
+				} else if (typeof (dupeObj[objInd]) == 'string') {
+					retObj[objInd] = dupeObj[objInd];
+				} else if (typeof (dupeObj[objInd]) == 'number') {
+					retObj[objInd] = dupeObj[objInd];
+				} else if (typeof (dupeObj[objInd]) == 'boolean') {
+					((dupeObj[objInd] == true) ?
+						retObj[objInd] = true : retObj[objInd] = false);
+				}
+			}
+		}
+		return retObj;
+	}
+  </script>
+</body>

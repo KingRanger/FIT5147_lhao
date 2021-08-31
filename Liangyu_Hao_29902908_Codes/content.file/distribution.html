@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- https://techblog.assignar.com/how-to-create-map-visualisation-using-d3js/ -->
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <meta charset="utf-8">
+    <title>Distribution of Wildfire in Austrslian</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+
+
+    <style type="text/css">
+
+        .circle:hover{
+        stroke: rgb(66, 50, 50);
+        stroke-width: 4px;
+        }
+        body {
+            margin: 0;
+            background-color: #fff;
+            font-family: 'Times New Roman', sans-serif;
+            font-weight: 300;
+        }
+
+        #svgcontainer {
+            width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+            padding: 5px 50px 10px 50px;
+            background-color: #fff
+        }
+
+
+        .post { top: 10%;}
+
+        h1 {
+            font-weight: 600;
+            color: #427aa8;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-weight: 500;
+            color: #aace55;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 15px 0 10px 0;
+        }
+
+        svg {
+            background-color: rgb(204, 201, 201);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="svgcontainer" style="width: 500px; float: left; ">
+        <h1>Distribution of Wildfire</h1>
+        <p>Data source: <a href="https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland" target="_blank">Fires from Space</a>.</p>
+        <div id="svganchor"></div>
+        <br>
+    </div>
+
+    <div>
+        <div style="width: 430px; float: left; font-size: 20px;font-weight: 790;margin-left:120px; margin-bottom: 5px; margin-top:160px;color: #24446eda; text-align: left;"> 
+          <h2 style="line-height:50px;">
+              Explanation:
+          </h2>
+          <p style="line-height:30px;">There are a total of seven circles on the map. Each light purple circle represents a state, and the area covered by the green circle represents the number of wildfires. The greater the number of wildfires, the larger the area covered by the green circle.</p>
+          <p style="line-height:30px;">Through this map, you can find that the number of wildfires in the eastern region is greater than that in the western region, and New South Wales has the largest number of wildfires.</p>
+          <p style="line-height:30px; color: #881074;">
+            <span class="our-services-icon fa fa-people"></span>
+            Please move the mouse to the circle, you will get detailed data of wildfire！
+          </p>
+         
+        </div>
+      
+      </div>
+
+    <script type="text/javascript">
+
+        //Width and height and margin
+        let margin = {top: 30, right: 30, bottom: 70, left: 60};
+        let w = 550 - margin.left - margin.right;
+        let h = 650 - margin.top - margin.bottom;
+
+        //Define map projection
+        let projection = d3.geo.mercator()
+            .center([132, -28])
+            .translate([w / 2, h / 2])
+            .scale(640);
+
+
+        //Define path generator
+        let path = d3.geo.path()
+            .projection(projection);
+
+        let color = d3.scale.ordinal()
+            .range(['Azure']);
+
+        //Create SVG
+        let svg = d3.select("#svganchor")
+            .append("svg")
+            .attr("width", w + margin.left + margin.right)
+            .attr("height", h + margin.top );
+        
+        // Create data for circles:
+        let markers = [
+        {long: 134.00, lat: -31.93, name: "South Australia",count: 45444, rate: "3.86%"}, 
+        {long: 115.84, lat: -31.96, name: "Western Australia",count: 202221, rate: "17.2%"}, 
+        {long: 147.29, lat: -42.85, name: "Tasmania",count: 4548, rate: "0.38%"}, 
+        {long: 153.02, lat: -25.46, name: "Queensland",count: 213319, rate: "18.1%"}, 
+        {long: 144.96, lat: -37.81, name: "Victoria",count: 84803, rate: "7.21%"}, 
+        {long: 151.21, lat: -33.87, name: "New South Wales",count: 477928, rate: "40.6%"}, 
+        {long: 130.84, lat: -15.46, name: "Northern Territory",count: 147598, rate: "12.65%"}, 
+        ];
+
+        //Load in GeoJSON data
+        d3.json("https://raw.githubusercontent.com/nikkisharma536/map_visualization_d3js/master/aust.json", (json) => {
+
+
+            //Binding data and creating one path per GeoJSON feature
+            svg.selectAll("path")
+                .data(json.features)
+                .enter()
+                .append("path")
+                .attr("d", path)
+                .attr("stroke", "dimgray")
+                .attr("fill", (d, i) => { return color(i) });
+
+            //States
+            svg.selectAll("text")
+                .data(json.features)
+                .enter()
+                .append("text")
+                .attr("fill", "darkslategray")
+                .attr("transform", (d) => { return "translate(" + path.centroid(d) + ")"; })
+                .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
+                .text((d) => {
+                    return d.properties.STATE_NAME;
+                });
+                
+
+            //Append the name
+            svg.append("text")
+                .attr("x", 0)
+                .attr("y", 340)
+                .attr("font-size", 90)
+                .attr("font-weight", "bold")
+                .attr("font-family", "Times New Roman")
+                .attr("text-anchor", "middle")
+                .attr("opacity", 0.5)
+                
+
+                // create a tooltip
+            var Tooltip = d3.select("#svganchor")
+                        .append("div")
+                        .attr("class", "tooltip")
+                        .style("opacity", 0)
+                        .style("background-color", "white")
+                        .style("border", "solid")
+                        .style("border-width", "2px")
+                        .style("border-radius", "5px")
+                        .style("padding", "5px")
+                        .style("position","absolute")
+                        
+
+              // Three function that change the tooltip when user hover / move / leave a cell
+            var mouseover = function(d) {
+            Tooltip.style("opacity", 1)
+            }
+            var mousemove = function(d) {
+
+                
+            Tooltip
+                .html(d.name + "<br>" + "Count: " + d.count + "<br>" + "Scale: " + d.rate)
+            d3.select('.tooltip').style("left",(d3.event.pageX) +"px")
+                .style("top",(d3.event.pageY +20)+"px")
+                .style("opacity",2.0)
+            
+            }
+            var mouseleave = function(d) {
+            Tooltip.style("opacity", 0)
+            }
+
+            // Add circles:
+            svg
+            .selectAll("myCircles")
+            .data(markers)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d){ return projection([d.long, d.lat])[0] })
+            .attr("cy", function(d){ return projection([d.long, d.lat])[1] })
+            .attr("r", 10)
+            .attr("class", "circle")
+            .style("fill", "69b3a2")
+            .attr("stroke", "#69b3a2")
+            .attr("fill-opacity", .3)
+            .attr("stroke-width", function(d) { return d.count/30000})
+            .attr("fill", "rgba(198, 45, 205, 0.8)")
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseleave", mouseleave)
+
+            
+
+        });
+
+
+    </script>
+</body>
+
+</html>

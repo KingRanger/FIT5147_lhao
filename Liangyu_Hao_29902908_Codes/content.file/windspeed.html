@@ -1,0 +1,123 @@
+<!-- https://codepen.io/pen/ -->
+<!-- https://www.highcharts.com/docs/chart-and-series-types/radial-bar-chart -->
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>Comparision of windspeed in different states</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <!-- Load library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <link rel="stylesheet" href="https://github.com/downloads/lafeber/world-flags-sprite/flags16.css" />
+
+    <style type="text/css">
+    #container {
+        height: 600px;
+
+        }
+
+
+
+        .highcharts-figure, .highcharts-data-table table {
+        min-width: 320px; 
+        max-width: 600px;
+        margin: 0em ;
+        left: 10px;
+        position: relative;
+        }
+
+        .highcharts-data-table table {
+            font-family: Verdana, sans-serif;
+            border-collapse: collapse;
+            border: 1px solid #EBEBEB;
+            margin: 10px auto;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+
+        .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+        }
+        .highcharts-data-table th {
+            font-weight: 600;
+            padding: 0.5em;
+        }
+        .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+        padding: 0.5em;
+        }
+        .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+        background: #f8f8f8;
+        }
+        .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+        }
+
+        .ld-label {
+            width:300px;
+            display: inline-block;
+        }
+
+        .ld-url-input {
+            width: 500px; 
+        }
+
+        .ld-time-input {
+            width: 40px;
+        }
+
+    </style>
+  </head>
+
+
+
+  <figure class="highcharts-figure">
+      <div id="container"></div>
+      <p class="highcharts-description">
+        Each color represents a state in Australia, and each circle represents a month. Whether in time or space, you can compare wind speed changes.
+      </p>
+      <p style="float: right; color: #28235B">The unit of wind speed is "km/h".</p>
+      <script src="windspeed.js"></script>
+  </figure>
+
+
+  
+  <body>
+    <div>
+ 
+        <div style="width: 430px; position: absolute; top: 0px; left: 720px;font-size: 20px;font-weight: 790;color: #24446eda; text-align: left;"> 
+          <p style="line-height:20px;">
+              <span class="our-services-icon fa fa-people"></span>
+              Wind Guest explanation:
+          </p>
+          <p style="line-height:30px; font-size: 15px; color: #151416da;">Wind Guest means that the short increase in wind speed must exceed 18 mph, which is different from Sustained Wind. The gust usually lasts less than 20 seconds, but it is the culprit in knocking down trees and causing other types of damage.</p>
+          <p style="line-height:20px;">
+            <span class="our-services-icon fa fa-people"></span>
+            Graph explanation:
+        </p>
+          <p style="line-height:30px;font-size: 15px;color: #151416da;">Except for Western Australia and Queensland, the wind gusts in other states are basically stable at around 40km/h. According to the Beaufort Wind Scale, this level of wind is called "Strong Breeze", which can blow big branches and bring waves. </p>
+          <p style="line-height:30px;font-size: 15px;color: #151416da;">According to the Australian Government Report, the wind speed of 12-15km/h will cause serious impact on the fire. However, the Wind Guest reached 40km/h. Therefore, I think the gust of wind contributed to the fire and caused the fire to burn for 5 months.</p>
+          <p style="line-height:20px;">
+            <span class="our-services-icon fa fa-people"></span>
+            Information Sources:
+          </p>
+          <p style="line-height:10px;font-size: 13px;color: #1e0a79da;">Data Source: Kaggle <a href="https://www.kaggle.com/jsphyg/weather-dataset-rattle-package" target="_blank">Rain in Australia</a>.</p>
+          <p style="line-height:10px;font-size: 13px;color: #1e0a79da;">Wind Guest Source: WIKIPEDIA <a href="https://en.wikipedia.org/wiki/Wind_gust" target="_blank">Wind gust</a>.</p>
+          <p style="line-height:10px;font-size: 13px;color: #1e0a79da;">Wind level Source: RMetS <a href="https://www.rmets.org/resource/beaufort-scale" target="_blank">The Beaufort Scale</a>.</p>
+          <p style="line-height:10px;font-size: 13px;color: #1e0a79da;">Inference Source: Australian Government Geoscience Australia <a href="https://www.ga.gov.au/scientific-topics/community-safety/bushfire" target="_blank">Bushfire</a>.</p>
+        </div>
+      
+      </div>
+
+    
+
+  </body>

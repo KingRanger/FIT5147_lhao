@@ -1,0 +1,262 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<style>
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot?v=4.6.3');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.6.3') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.6.3') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.6.3') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.6.3') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.6.3#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.btn-trendy{
+  font-size: 10px;
+  color: #4D5259;
+  line-height: 1;
+  font-weight: bold;
+  padding: .5em 2em;
+  background: #FFFFFF;
+  border: 1.5px solid #161616;
+  box-shadow: 4px 4px 0 0 #6b7179;
+  
+} 
+
+.btn-trendy:hover {
+  box-shadow: 8px 8px 0 0 #42454b;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.fa-people:before {
+  content: "\f1ae";
+}
+.our-services-icon span.fa {
+    margin-left: 141px;
+    color: #445c6e;
+    font-size: 30px;
+    background: #fff;
+    width: 55px;
+    height: 55px;
+    line-height: 50px;
+}
+</style>
+
+<div>
+  <div style="width: 500px; float: left; ">
+  <!-- Create a div where the graph will take place -->
+  <div id="barchart">
+    <!-- Add 5 buttons -->
+    <button class="btn-trendy" style="margin:5px;" onclick="update('8')" id="1">TIME: 2019-08</button>
+    <button class="btn-trendy" style="margin:5px;" onclick="update('9')" id="2">TIME: 2019-09</button>
+    <button class="btn-trendy" style="margin:5px;" onclick="update('10')" id="2">TIME: 2019-10</button>
+    <button class="btn-trendy" style="margin:5px;" onclick="update('11')" id="2">TIME: 2019-11</button>
+    <button class="btn-trendy" style="margin:5px;" onclick="update('12')" id="2">TIME: 2019-12</button>
+    <button class="btn-trendy" style="margin:5px;" onclick="update('1')" id="2">TIME: 2020-01</button>
+  </div>
+  
+  </div>
+  <div style="width: 430px; float: left; font-size: 20px;font-weight: 790;margin-left:120px; margin-bottom:20px; margin-top:10px;color: #24446eda; text-align: left;"> 
+    <p style="line-height:30px;">
+        <span class="our-services-icon fa fa-people"></span>
+        Comparison of temperature by state:
+    </p>
+    <p style="line-height:30px; font-size: 15px; color: #151416da;">By comparing different months, we found that the temperature in each state gradually increased from 2019-08 to 2020-01. However, the temperature in New South Wales was not the highest.</p>
+    <p style="line-height:30px;font-size: 15px;color: #151416da;">In contrast, the Northern Territory's temperature is the highest temperature in the states. However, the number of wildfires in the Northern Territory during this period only accounted for 12.65%. </p>
+    <p style="line-height:30px;">
+      <span class="our-services-icon fa fa-people"></span>
+      Pronder:
+    </p>
+    <p style="line-height:30px;font-size: 15px;color: #151416da;">Do you think there is a connection between temperature and wildfire? Do you think that it is because the temperature in New South Wales is higher than that in other states, causing the highest number of wildfires in this state? The temperature continued to rise in January, and it seems that the Australian fire will gradually decrease in January regardless of the temperature.</p>
+  </div>
+
+</div>
+
+
+<script>
+
+var data = [
+            {group: "8", value: "New south wales",temp: 15.5},
+            {group: "8", value: "Victoria",temp: 12.7},
+            {group: "8", value: "Queensland",temp: 19.4},
+            {group: "8", value: "South Aus",temp: 11.7},
+            {group: "8", value: "Western Aus",temp: 16.1},
+            {group: "8", value: "Tasmnia",temp: 10.4},
+            {group: "8", value: "Northern territory",temp: 27.6},
+            {group: "9", value: "New south wales",temp: 18.6},
+            {group: "9", value: "Victoria",temp: 14.9},
+            {group: "9", value: "Queensland",temp: 22.0},
+            {group: "9", value: "South Aus",temp: 14.7},
+            {group: "9", value: "Western Aus",temp: 17.4},
+            {group: "9", value: "Tasmnia",temp: 12.9},
+            {group: "9", value: "Northern territory",temp: 29.7},
+            {group: "10", value: "New south wales",temp: 20.8},
+            {group: "10", value: "Victoria",temp: 16.7},
+            {group: "10", value: "Queensland",temp: 23.8},
+            {group: "10", value: "South Aus",temp: 17.7},
+            {group: "10", value: "Western Aus",temp: 20.7},
+            {group: "10", value: "Tasmnia",temp: 14.4},
+            {group: "10", value: "Northern territory",temp: 30.7},
+            {group: "11", value: "New south wales",temp: 21.9},
+            {group: "11", value: "Victoria",temp: 19.5},
+            {group: "11", value: "Queensland",temp: 26.0},
+            {group: "11", value: "South Aus",temp: 21.4},
+            {group: "11", value: "Western Aus",temp: 23.1},
+            {group: "11", value: "Tasmnia",temp: 15.8},
+            {group: "11", value: "Northern territory",temp: 30.9},
+            {group: "12", value: "New south wales",temp: 23.7},
+            {group: "12", value: "Victoria",temp: 20.6},
+            {group: "12", value: "Queensland",temp: 26.6},
+            {group: "12", value: "South Aus",temp: 22.7},
+            {group: "12", value: "Western Aus",temp: 25.1},
+            {group: "12", value: "Tasmnia",temp: 17.6},
+            {group: "12", value: "Northern territory",temp: 30.0},  
+            {group: "1", value: "New south wales",temp: 24.86},
+            {group: "1", value: "Victoria",temp: 22.22},
+            {group: "1", value: "Queensland",temp: 27.66},
+            {group: "1", value: "South Aus",temp: 25.12},
+            {group: "1", value: "Western Aus",temp: 27.58},
+            {group: "1", value: "Tasmnia",temp: 18.79},
+            {group: "1", value: "Northern territory",temp: 29.30}, 
+            ];
+
+// setthe graph
+var margin = {top: 30, right: 30, bottom: 70, left: 60},
+    width = 530 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#barchart")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// scale X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .padding(0.2);
+var xAxis = svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+ // add label for x axis
+svg.append("text")             
+    .attr("transform",
+          "translate(" + (width/2) + " ," + 
+                          (height + margin.top + 20) + ")")
+    .style("text-anchor", "middle")
+    .text("States in Australia");
+
+// scale the Y axis
+var y = d3.scaleLinear()
+  .range([ height, 0]);
+var yAxis = svg.append("g")
+  .attr("class", "myYaxis")
+ // add label for y axis
+svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x",0 - (height / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Temperaature (°C) ");
+
+
+//Create a tooltip div 
+var tooltip = d3.select("#barchart")
+    .append("div")
+      .style("opacity", 0)
+      .attr("class", "tooltip")
+      .style("background-color", "#313131")
+      .style("border-radius", "5px")
+      .style("padding", "8px")
+      .style("color", "white")
+      .style("position", "absolute")
+      .style("font-size","15px")
+      
+// A function that create / update the plot 
+function update(selectedVar) {
+
+    let newData = data.filter(function (d) {
+    return d.group == selectedVar
+  })
+    var colors = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d){
+                    return d.temp;
+                  })])
+    .range(['#aa4b6b', '#6b6b83'])
+
+    // X axis
+    x.domain(newData.map(function(d) { return d.value; }))
+    xAxis.transition().duration(1000).call(d3.axisBottom(x))
+
+    // Add Y axis
+    y.domain([0, d3.max(newData, function(d) { return +d.temp }) ]);
+    yAxis.transition().duration(1000).call(d3.axisLeft(y));
+
+ 
+
+    //Create functions to show tooltip
+    var showTooltip = function(d) {
+      tooltip
+        .transition()
+        .duration(100)
+        .style("opacity", 0.75)
+        
+    }
+    var moveTooltip = function(d) {
+      tooltip
+      .html("State name:" + d.value +"</br>"+
+              "Temperature: " + d.temp +" °C")
+        .style("left", (d3.event.pageX + 15) + "px")
+        .style("top", (d3.event.pageY+10) + "px")
+    }
+    var hideTooltip = function(d) {
+      tooltip
+        .style("opacity", 0)
+        .style("top", (d3.event.pageY - 800) + "px")   
+        .style("left", (d3.event.pageX - 800) + "px")
+    }
+
+
+    // map data to existing bars
+    var u = svg.selectAll("rect")
+      .data(newData)
+
+    // update bars
+    u
+      .enter()     
+      .append("rect")
+      .on("mouseover", showTooltip)
+      .on("mousemove", moveTooltip )
+      .on("mouseleave", hideTooltip )
+      .merge(u)
+      .transition()
+      .duration(1000)
+        .attr("x", function(d) { return x(d.value); })
+        .attr("y", function(d) { return y(d.temp); })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) { return height - y(d.temp); })
+        .attr("fill", function(d) { return colors(d.temp); })
+      
+  
+
+}
+
+// Initialize plot
+update('8')
+
+</script>
+
+</html>
